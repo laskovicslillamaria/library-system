@@ -104,29 +104,91 @@
             color:#ffdd99;
         }
 
-        .book-grid{
-            display:grid;
-            grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+<!--        .book-grid{-->
+<!--            display:grid;-->
+<!--            grid-template-columns:repeat(auto-fit,minmax(260px,1fr));-->
+<!--            gap:25px;-->
+<!--        }-->
+
+<!--        .book-card{-->
+<!--            background:rgba(15,0,0,0.82);-->
+<!--            border:2px solid #ff6600;-->
+<!--            border-radius:18px;-->
+<!--            overflow:hidden;-->
+<!--            box-shadow:0 0 15px rgba(255,80,0,0.5);-->
+<!--            transition:0.2s;-->
+<!--        }-->
+
+<!--        .book-card:hover{-->
+<!--            transform:translateY(-6px);-->
+<!--        }-->
+
+<!--        .book-card img{-->
+<!--            width: 100%;-->
+<!--            height: 260px;-->
+<!--            object-fit: cover;-->
+<!--            border-radius: 12px;-->
+<!--            margin-bottom: 10px;-->
+<!--        }-->
+        .books-section{
+            display:flex;
+            flex-direction:row;
+            justify-content:center;
+            align-items:flex-start;
             gap:25px;
+            flex-wrap:wrap;
+            width:100%;
+            margin-top:50px;
         }
 
         .book-card{
-            background:rgba(15,0,0,0.82);
-            border:2px solid #ff6600;
-            border-radius:18px;
-            overflow:hidden;
-            box-shadow:0 0 15px rgba(255,80,0,0.5);
-            transition:0.2s;
+            width: 220px;
+            background: rgba(0,0,0,0.65);
+            border: 2px solid #ff6600;
+            border-radius: 18px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(255,100,0,0.4);
+            transition: 0.3s;
         }
 
         .book-card:hover{
-            transform:translateY(-6px);
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 0 30px rgba(255,120,0,0.8);
         }
 
         .book-card img{
-            width:100%;
-            height:340px;
-            object-fit:cover;
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .book-card h3{
+            color: #ffd27a;
+            margin: 12px 0 6px;
+            font-size: 24px;
+        }
+
+        .book-card p{
+            color: #ddd;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .book-card button{
+            background: linear-gradient(45deg,#ff6600,#ff9900);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .book-card button:hover{
+            filter: brightness(1.15);
         }
 
         .book-info{
@@ -174,9 +236,24 @@
     </div>
 </div>
 
+<div class="books-section">
+<div class="book-card">
+    <img src="book_images/HarryPotter.png" alt="Harry Potter">
+    <h3>Harry Potter</h3>
+    <p>J.K. Rowling</p>
+    <button>Kölcsönzés</button>
+</div>
+
+<div class="book-card">
+    <img src="book_images/GyurukUra.png" alt="Gyűrűk Ura">
+    <h3>A Gyűrűk Ura</h3>
+    <p>J.R.R. Tolkien</p>
+    <button>Kölcsönzés</button>
+</div>
+</div>
 <div id="welcome" class="hidden"></div>
 
-<div class="book-grid" id="bookGrid"></div>
+<div class="books-section" id="bookGrid"></div>
 
 <script>
     let currentUser = null;
