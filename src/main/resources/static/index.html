@@ -228,7 +228,7 @@
 </header>
 
 <div class="login-box" id="loginBox">
-    <h2>👤 Bejelentkezés</h2>
+    <h2>Bejelentkezés</h2>
 
     <div class="login-row">
         <input type="text" id="username" placeholder="Neved">
@@ -262,7 +262,7 @@
         const name = document.getElementById("username").value;
 
         if(name.trim() === ""){
-            alert("Adj meg nevet!");
+            alert("Jelentkezz be, hogy kölcsönözni tudj!");
             return;
         }
 
@@ -291,7 +291,6 @@
         books.forEach((book,index)=>{
 
             const available = book.available === true;
-
             const card = document.createElement("div");
             card.className = "book-card";
 
@@ -346,7 +345,7 @@
             })
         });
 
-        alert("Sikeres kölcsönzés! 📚");
+        alert("Sikeres kölcsönzés!");
         loadBooks();
     }
 
