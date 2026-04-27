@@ -34,6 +34,10 @@ public class LoanService {
         User user = userRepository.findById(userId).orElseThrow();
         Book book = bookRepository.findById(bookId).orElseThrow();
 
+        if(!book.getAvailable()){
+            throw new RuntimeException("A könyv már ki van kölcsönözve!");
+        }
+
         book.setAvailable(false);
         bookRepository.save(book);
 
