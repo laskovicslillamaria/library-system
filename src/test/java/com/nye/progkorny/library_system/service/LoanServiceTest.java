@@ -14,8 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,17 +36,24 @@ class LoanServiceTest {
     @Test
     void shouldCreateLoan() {
         User user = new User();
+
         Book book = new Book();
-        book.setAvailable(true);
+        book.setTotalCopies(3);
+        book.setAvailableCopies(3);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
+
+
+        when(loanRepository.existsByUserIdAndBookIdAndReturnedFalse(1L, 1L))
+                .thenReturn(false);
+
         when(loanRepository.save(org.mockito.ArgumentMatchers.any(Loan.class)))
                 .thenAnswer(i -> i.getArgument(0));
 
         Loan result = service.createLoan(1L, 1L);
 
         assertNotNull(result);
-        assertFalse(book.getAvailable());
+        assertEquals(2, book.getAvailableCopies());
     }
 }
