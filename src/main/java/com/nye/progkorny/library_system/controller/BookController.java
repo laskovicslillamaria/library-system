@@ -22,9 +22,7 @@ public class BookController {
     }
 
     @PostMapping
-    public Book create(@RequestBody Book book) {
-        return service.save(book);
-    }
+    public Book create(@RequestBody Book book) {return service.createBook(book);}
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {

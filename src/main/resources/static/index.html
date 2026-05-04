@@ -242,30 +242,32 @@
 </div>
 <div id="welcome" class="hidden"></div>
 
-<div class="books-section">
-<div class="book-card">
-    <img src="book_images/HarryPotter.png" alt="Harry Potter">
-    <h3>Harry Potter és a bölcsek köve</h3>
-    <p>J.K. Rowling</p>
-    <button onClick="borrowBook(1)">Kölcsönzés</button>
-</div>
+<div class="books-section" id="bookGrid"></div>
+<!--<div class="book-card">-->
+<!--    <img src="book_images/HarryPotter.png" alt="Harry Potter">-->
+<!--    <h3>Harry Potter és a bölcsek köve</h3>-->
+<!--    <p>J.K. Rowling</p>-->
+<!--    <button onClick="borrowBook(1)">Kölcsönzés</button>-->
+<!--</div>-->
 
-<div class="book-card">
-    <img src="book_images/GyurukUra.png" alt="Gyűrűk Ura">
-    <h3>A Gyűrűk Ura</h3>
-    <p>J.R.R. Tolkien</p>
-    <button onClick="borrowBook(2)">Kölcsönzés</button>
-</div>
-</div>
-
+<!--<div class="book-card">-->
+<!--    <img src="book_images/GyurukUra.png" alt="Gyűrűk Ura">-->
+<!--    <h3>A Gyűrűk Ura</h3>-->
+<!--    <p>J.R.R. Tolkien</p>-->
+<!--    <button onClick="borrowBook(2)">Kölcsönzés</button>-->
+<!--</div>-->
+<div id="myBooks"></div>
 <script>
     let currentUser = null;
+    let currentUserObj = null;
 
-    function login() {
+
+    // LOGIN
+    async function login() {
         const name = document.getElementById("username").value;
 
         if (name.trim() === "") {
-            alert("Jelentkezz be, hogy kölcsönözni tudj!");
+            alert("Jelentkezz be!");
             return;
         }
 
@@ -274,18 +276,15 @@
         document.getElementById("loginBox").classList.add("hidden");
         const welcome = document.getElementById("welcome");
         welcome.classList.remove("hidden");
-        welcome.innerHTML = "Üdv újra, <b>" + currentUser + "</b> 🐉";
+        welcome.innerHTML = "Üdv, <b>" + currentUser + "</b> 🐉";
+
+        await ensureUser();              // user betöltés
+        loadMyBooks(currentUserObj.id);  // saját könyvek
     }
 
 
-
-    async function borrowBook(bookId) {
-
-        if (currentUser == null) {
-            alert("Előbb jelentkezz be!");
-            return;
-        }
-
+    // USER KEZELÉS
+    async function ensureUser() {
         const usersResponse = await fetch('/users');
         let users = await usersResponse.json();
 
@@ -304,19 +303,111 @@
             user = await createUser.json();
         }
 
+        currentUserObj = user;
+    }
+
+
+
+    function getImage(title) {
+        if (title.includes("Harry")) return "book_images/HarryPotter.png";
+        if (title.includes("Gyűrűk")) return "book_images/GyurukUra.png";
+        if (title.includes("Dűne")) return "book_images/Dune.png";
+        if (title.includes("1984")) return "book_images/1984.png";
+        return "book_images/default.png";
+    }
+
+
+    // KÖNYVEK BETÖLTÉS
+    async function loadBooks() {
+        const response = await fetch('/books');
+        const books = await response.json();
+
+        const grid = document.getElementById("bookGrid");
+        grid.innerHTML = "";
+
+        books.forEach(book => {
+            const card = document.createElement("div");
+            card.className = "book-card";
+
+            card.innerHTML = `
+            <img src="${getImage(book.title)}">
+
+            <h3>${book.title}</h3>
+            <p>${book.author}</p>
+
+            <p>📚 ${book.availableCopies} / ${book.totalCopies}</p>
+
+            ${
+                book.availableCopies > 0
+                    ? `<button onclick="borrowBook(${book.id})">Kölcsönzés</button>`
+                    : `<button class="disabled-btn" disabled>Nincs készleten</button>`
+            }
+        `;
+
+            grid.appendChild(card);
+        });
+    }
+
+
+    //KÖLCSÖNZÉS
+    async function borrowBook(bookId) {
+
+        if (!currentUserObj) {
+            alert("Előbb jelentkezz be!");
+            return;
+        }
+
         await fetch('/loans', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                userId: user.id,
+                userId: currentUserObj.id,
                 bookId: bookId
             })
         });
 
         alert("Sikeres kölcsönzés!");
+
+        loadBooks();
+        loadMyBooks(currentUserObj.id);
     }
 
 
+    //SAJÁT KÖNYVEK
+    async function loadMyBooks(userId) {
+        const response = await fetch(`/loans/user/${userId}`);
+        const loans = await response.json();
+
+        const container = document.getElementById("myBooks");
+        container.innerHTML = "<h2>Nálad lévő könyvek:</h2>";
+
+        loans.forEach(loan => {
+            const div = document.createElement("div");
+
+            div.innerHTML = `
+            <p>${loan.book.title}</p>
+            <button onclick="returnBook(${loan.id})">Visszahozás</button>
+        `;
+
+            container.appendChild(div);
+        });
+    }
+
+
+    //VISSZAHOZÁS
+    async function returnBook(loanId) {
+        await fetch(`/loans/return/${loanId}`, {
+            method: 'POST'
+        });
+
+        alert("Visszahozva!");
+
+        loadBooks();
+        loadMyBooks(currentUserObj.id);
+    }
+
+
+    window.onload = loadBooks;
 </script>
 
 </body>

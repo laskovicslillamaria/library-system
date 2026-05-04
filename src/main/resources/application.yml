@@ -2,10 +2,15 @@ spring:
   application:
     name: library-system
   datasource:
-    url: jdbc:mysql://localhost:3307/librarydb
+    url: jdbc:mysql://mysql:3306/librarydb
     username: dragon
     password: dragon123
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+    hikari:
+      initialization-fail-timeout: 60000
+      connection-timeout: 60000
+
   jpa:
     show-sql: true
     hibernate:

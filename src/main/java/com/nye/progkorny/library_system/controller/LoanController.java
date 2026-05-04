@@ -11,24 +11,35 @@ import java.util.Map;
 @RequestMapping("/loans")
 public class LoanController {
 
-    private final LoanService service;
+    private final LoanService loanService;
 
-    public LoanController(LoanService service) {
-        this.service = service;
+    public LoanController(LoanService loanService) {
+        this.loanService = loanService;
     }
 
     @GetMapping
     public List<Loan> getAllLoans() {
-        return service.getAllLoans();
+        return loanService.getAllLoans();
     }
 
     @PostMapping
     public Loan createLoan(@RequestBody Map<String, Long> body) {
-        return service.createLoan(body.get("userId"), body.get("bookId"));
+        return loanService.createLoan(body.get("userId"), body.get("bookId"));
     }
 
     @DeleteMapping("/{id}")
     public void deleteLoan(@PathVariable Long id) {
-        service.deleteLoan(id);
+        loanService.deleteLoan(id);
+    }
+
+
+
+    @PostMapping("/return/{loanId}")
+    public void returnBook(@PathVariable Long loanId) {
+        loanService.returnBook(loanId);
+    }
+    @GetMapping("/user/{userId}")
+    public List<Loan> getUserLoans(@PathVariable Long userId) {
+        return loanService.getLoansByUser(userId);
     }
 }

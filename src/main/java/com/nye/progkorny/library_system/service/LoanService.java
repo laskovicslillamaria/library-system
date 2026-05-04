@@ -31,16 +31,28 @@ public class LoanService {
     }
 
     public Loan createLoan(Long userId, Long bookId) {
+
         User user = userRepository.findById(userId).orElseThrow();
         Book book = bookRepository.findById(bookId).orElseThrow();
 
-        if(!book.getAvailable()){
-            throw new RuntimeException("A könyv már ki van kölcsönözve!");
+        // 1 user ne vehesse ki ugyanazt a könyvet kétszer
+        boolean alreadyBorrowed = loanRepository
+                .existsByUserIdAndBookIdAndReturnedFalse(userId, bookId);
+
+        if (alreadyBorrowed) {
+            throw new RuntimeException("Már nálad van ez a könyv!");
         }
 
-        book.setAvailable(false);
+        //  nincs készleten
+        if (book.getAvailableCopies() <= 0) {
+            throw new RuntimeException("Nincs elérhető példány!");
+        }
+
+        // készletet csökkenés
+        book.setAvailableCopies(book.getAvailableCopies() - 1);
         bookRepository.save(book);
 
+        // kölcsönzés létrehozása
         Loan loan = new Loan();
         loan.setUser(user);
         loan.setBook(book);
@@ -52,5 +64,27 @@ public class LoanService {
 
     public void deleteLoan(Long id) {
         loanRepository.deleteById(id);
+    }
+
+    public void returnBook(Long loanId) {
+
+        Loan loan = loanRepository.findById(loanId).orElseThrow();
+
+        if (loan.isReturned()) {
+            return;
+        }
+
+        loan.setReturned(true);
+
+        // készletet növelés
+        Book book = loan.getBook();
+        book.setAvailableCopies(book.getAvailableCopies() + 1);
+
+        bookRepository.save(book);
+        loanRepository.save(loan);
+    }
+
+    public List<Loan> getLoansByUser(Long userId) {
+        return loanRepository.findByUserIdAndReturnedFalse(userId);
     }
 }

@@ -16,5 +16,6 @@ public class Book {
 
     private String title;
     private String author;
-    private Boolean available = true;
+    private int totalCopies;
+    private int availableCopies;
 }

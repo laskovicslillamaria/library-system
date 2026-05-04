@@ -26,4 +26,7 @@ public class BookService {
     public void delete(Long id) {
         repository.deleteById(id);
     }
+
+    public Book createBook(Book book) {
+        book.setAvailableCopies(book.getTotalCopies()); return repository.save(book);}
 }

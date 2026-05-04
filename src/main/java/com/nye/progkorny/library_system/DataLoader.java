@@ -16,11 +16,12 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if(repository.count() == 0) {
-            repository.save(new Book(null,"Harry Potter","J.K. Rowling",true));
-            repository.save(new Book(null,"A Gyűrűk Ura","J.R.R. Tolkien",true));
-            repository.save(new Book(null,"Dűne","Frank Herbert",true));
-            repository.save(new Book(null,"1984","George Orwell",true));
+        if (repository.count() == 0) {
+
+            repository.save(new Book(null, "Harry Potter", "J.K. Rowling", 3, 3));
+            repository.save(new Book(null, "A Gyűrűk Ura", "J.R.R. Tolkien", 3, 3));
+            repository.save(new Book(null, "Dűne", "Frank Herbert", 3, 3));
+            repository.save(new Book(null, "1984", "George Orwell", 3, 3));
         }
     }
 }
