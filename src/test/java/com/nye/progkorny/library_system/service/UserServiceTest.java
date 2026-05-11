@@ -23,6 +23,8 @@ class UserServiceTest {
     @InjectMocks
     private UserService service;
 
+
+//helyesen visszaadja a repositoryból kapott felhasználókat
     @Test
     void shouldReturnAllUsers() {
         User user = new User();
@@ -35,4 +37,25 @@ class UserServiceTest {
         assertEquals(1, result.size());
         assertEquals("Test", result.get(0).getName());
     }
+//Menti a user-t
+    @Test
+    void shouldSaveUser() {
+
+        User user = new User();
+        user.setName("Test");
+
+        when(repository.save(user)).thenReturn(user);
+
+        User result = service.saveUser(user);
+
+        assertEquals("Test", result.getName());
+    }
+//Nézi hogy nem dob e hibát
+    @Test
+    void shouldDeleteUser() {
+
+        service.deleteUser(1L);
+
+    }
+
 }

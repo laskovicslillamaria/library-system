@@ -23,6 +23,8 @@ class BookServiceTest {
     @InjectMocks
     private BookService service;
 
+
+//helyesen visszaadja a könyvet
     @Test
     void shouldReturnAllBooks() {
         Book book = new Book();
@@ -35,4 +37,40 @@ class BookServiceTest {
         assertEquals(1, result.size());
         assertEquals("Harry Potter", result.get(0).getTitle());
     }
+// automatikusan beállítja a készletet
+    @Test
+    void shouldCreateBook() {
+
+        Book book = new Book();
+        book.setTitle("Harry Potter");
+        book.setTotalCopies(3);
+
+        when(repository.save(book)).thenReturn(book);
+
+        Book result = service.createBook(book);
+
+        assertEquals(3, result.getAvailableCopies());
+        assertEquals("Harry Potter", result.getTitle());
+    }
+//Save metódus működik e
+    @Test
+    void shouldSaveBook() {
+
+        Book book = new Book();
+        book.setTitle("Dűne");
+
+        when(repository.save(book)).thenReturn(book);
+
+        Book result = service.save(book);
+
+        assertEquals("Dűne", result.getTitle());
+    }
+//Nem dob hibát
+    @Test
+    void shouldDeleteBook() {
+
+        service.delete(1L);
+
+    }
+
 }
