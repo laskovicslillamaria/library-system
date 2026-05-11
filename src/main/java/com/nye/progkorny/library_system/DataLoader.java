@@ -21,7 +21,7 @@ public class DataLoader implements CommandLineRunner {
             repository.save(new Book(null, "Harry Potter", "J.K. Rowling", 3, 3));
             repository.save(new Book(null, "A Gyűrűk Ura", "J.R.R. Tolkien", 3, 3));
             repository.save(new Book(null, "Dűne", "Frank Herbert", 3, 3));
-            repository.save(new Book(null, "1984", "George Orwell", 3, 3));
+            repository.save(new Book(null, "Book of Azreal", "Amber V. Nicole", 3, 3));
         }
     }
 }
