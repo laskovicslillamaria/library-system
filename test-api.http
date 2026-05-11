@@ -2,6 +2,8 @@ POST http://localhost:8080/books
 Content-Type: application/json
 
 {
-  "title": "Harry Potter",
-  "author": "J.K. Rowling"
+  "title": "Book of Azreal",
+  "author": "Amber V. Nicole",
+  "totalCopies": 3,
+  "availableCopies": 3
 }
