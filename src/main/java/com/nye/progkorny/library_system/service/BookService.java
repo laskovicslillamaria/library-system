@@ -29,4 +29,15 @@ public class BookService {
 
     public Book createBook(Book book) {
         book.setAvailableCopies(book.getTotalCopies()); return repository.save(book);}
+
+    public Book updateBook(Long id, Book updatedBook) {
+
+        Book book = repository.findById(id).orElseThrow();
+
+        book.setTitle(updatedBook.getTitle());
+        book.setAuthor(updatedBook.getAuthor());
+        book.setTotalCopies(updatedBook.getTotalCopies());
+
+        return repository.save(book);
+    }
 }
