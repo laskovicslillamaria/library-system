@@ -18,4 +18,5 @@ public class Book {
     private String author;
     private int totalCopies;
     private int availableCopies;
+
 }
