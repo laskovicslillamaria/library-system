@@ -1,7 +1,8 @@
-package com.nye.progkorny.library_system.service;
+package com.nye.progkorny.library_system.service.service;
 
 import com.nye.progkorny.library_system.model.User;
 import com.nye.progkorny.library_system.repository.UserRepository;
+import com.nye.progkorny.library_system.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
