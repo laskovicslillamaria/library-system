@@ -6,7 +6,9 @@ import com.nye.progkorny.library_system.model.User;
 import com.nye.progkorny.library_system.repository.BookRepository;
 import com.nye.progkorny.library_system.repository.LoanRepository;
 import com.nye.progkorny.library_system.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -40,12 +42,18 @@ public class LoanService {
                 .existsByUserIdAndBookIdAndReturnedFalse(userId, bookId);
 
         if (alreadyBorrowed) {
-            throw new RuntimeException("Már nálad van ez a könyv!");
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Már nálad van ez a könyv!"
+            );
         }
 
         //  nincs készleten
         if (book.getAvailableCopies() <= 0) {
-            throw new RuntimeException("Nincs elérhető példány!");
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Nincs elérhető példány!"
+            );
         }
 
         // készletet csökkenés
