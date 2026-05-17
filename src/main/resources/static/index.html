@@ -357,7 +357,7 @@
             return;
         }
 
-        await fetch('/loans', {
+        const response = await fetch('/loans', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -366,10 +366,13 @@
             })
         });
 
-        alert("Sikeres kölcsönzés!");
+        const text = await response.text();
+
+        alert(text);
 
         loadBooks();
         loadMyBooks(currentUserObj.id);
+
     }
 
 
