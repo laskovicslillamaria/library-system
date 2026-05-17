@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -50,11 +51,11 @@ class LoanServiceTest {
                 .thenReturn(false);
 
         RuntimeException exception = assertThrows(
-                RuntimeException.class,
+                ResponseStatusException.class,
                 () -> service.createLoan(1L, 1L)
         );
 
-        assertEquals("Nincs elérhető példány!", exception.getMessage());
+        assertEquals("400 BAD_REQUEST \"Nincs elérhető példány!\"", exception.getMessage());
     }
 
 // Már ki van kölcsönözve
@@ -74,11 +75,11 @@ class LoanServiceTest {
                 .thenReturn(true);
 
         RuntimeException exception = assertThrows(
-                RuntimeException.class,
+                ResponseStatusException.class,
                 () -> service.createLoan(1L, 1L)
         );
 
-        assertEquals("Már nálad van ez a könyv!", exception.getMessage());
+        assertEquals("400 BAD_REQUEST \"Már nálad van ez a könyv!\"", exception.getMessage());
     }
 //Könyv visszahozás
     @Test
